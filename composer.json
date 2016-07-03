@@ -1,0 +1,16 @@
+{
+    "name": "mihailov-vf/soa-silex",
+    "require": {
+        "silex/silex": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "authors": [
+        {
+            "name": "Mihailov Vasilievic Filho",
+            "email": "mihailov.vf@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
