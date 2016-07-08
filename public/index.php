@@ -19,4 +19,15 @@ $app->post('/cliente', function (Request $request) use ($app) {
     return $app->json($cliente);
 });
 
+$app->get('/produto', function () use ($app) {
+    $produtos = $app['produtoService']->getAll();
+    return $app->json($produtos);
+});
+
+$app->post('/produto', function (Request $request) use ($app) {
+    $dados = $request->get('dados');
+    $produto = $app['produtoService']->insert($dados);
+    return $app->json($produto);
+});
+
 $app->run();
