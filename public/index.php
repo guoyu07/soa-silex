@@ -19,6 +19,4 @@ $app->post('/cliente', function (Request $request) use ($app) {
     return $app->json($cliente);
 });
 
-require_once __DIR__ . "/tela.php";
-
 $app->run();
