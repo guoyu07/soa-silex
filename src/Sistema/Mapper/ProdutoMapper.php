@@ -5,6 +5,9 @@ namespace Soa\Sistema\Mapper;
 use Soa\Sistema\Entity\Produto;
 use \Pdo;
 
+/**
+ *
+ */
 class ProdutoMapper
 {
 
@@ -77,6 +80,52 @@ class ProdutoMapper
         $dadosProduto = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $this->buildObject($dadosProduto);
+    }
+
+    /**
+     *
+     * @param  Produto $produto
+     * @return Produto
+     */
+    public function update(Produto $produto): Produto
+    {
+        $params = [
+            ':nome' => $produto->getNome(),
+            ':descricao' => $produto->getDescricao(),
+            ':valor' => $produto->getValor(),
+        ];
+
+        $set = [];
+        foreach (array_keys($params) as $key) {
+            $keyname = substr($key, 1);
+            $set[] = "$keyname = $key";
+        }
+
+        $params[':id'] = $produto->getId();
+
+        $sql = sprintf("UPDATE produtos SET %s WHERE id = :id", implode(', ', $set));
+        $statement = $this->connection->prepare($sql);
+        $statement->execute($params);
+
+        if (!$statement->rowCount()) {
+            throw new \Exception("Não foi possível atualizar o produto", 1);
+        }
+
+        return $produto;
+    }
+
+    /**
+     *
+     * @param  int    $idProduto
+     * @return int Produtos deletados
+     */
+    public function delete(int $idProduto): int
+    {
+        $sql = "DELETE FROM produtos WHERE id = :id";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([':id' => $idProduto]);
+
+        return $statement->rowCount();
     }
 
     /**

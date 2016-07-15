@@ -16,6 +16,10 @@ class ProdutoService
      */
     private $mapper;
 
+    /**
+     *
+     * @param ProdutoMapper $mapper
+     */
     public function __construct(ProdutoMapper $mapper)
     {
         $this->mapper = $mapper;
@@ -24,12 +28,36 @@ class ProdutoService
     /**
      *
      * @param  array  $dados
-     * @return Produto
+     * @return array dados: produto, status e message
      */
-    public function insert(array $dados)
+    public function save(array $dados): array
     {
         $produto = $this->mapper->buildObject($dados);
-        return $this->mapper->insert($produto)->toArray();
+
+        if (!isset($dados['id']) || !$dados['id']) {
+            $produtoRetorno = $this->mapper->insert($produto);
+        }
+
+        if (isset($dados['id'])) {
+            $produtoRetorno = $this->mapper->update($produto);
+        }
+
+        if ($produtoRetorno instanceof Produto) {
+            $retorno = [
+                'success' => true,
+                'message' => 'Dados do produto alterados com sucesso!',
+                'produto' => $produtoRetorno->toArray(),
+            ];
+
+            return $retorno;
+        }
+
+        $retorno = [
+            'success' => false,
+            'message' => 'Não foi possível inserir/alterar os dados do produto.',
+        ];
+
+        return $retorno;
     }
 
     /**
@@ -37,7 +65,7 @@ class ProdutoService
      * @param  array  $filtros
      * @return Produto[]
      */
-    public function getAll(array $filtros = [])
+    public function getAll(array $filtros = []): array
     {
         $produtos = $this->mapper->getAll($filtros);
         $produtos = array_map(array($this, 'extrairDados'), $produtos);
@@ -56,10 +84,36 @@ class ProdutoService
 
     /**
      *
+     * @param  int    $idProduto
+     * @return array dados: success, message
+     */
+    public function delete(int $idProduto): array
+    {
+        $rows = $this->mapper->delete($idProduto);
+
+        if ($rows > 0) {
+            $retorno = [
+                'success' => true,
+                'message' => "Produto #$idProduto deletado",
+            ];
+
+            return $retorno;
+        }
+
+        $retorno = [
+            'success' => false,
+            'message' => "Erro ao deletar produto #$idProduto",
+        ];
+
+        return $retorno;
+    }
+
+    /**
+     *
      * @param  Produto $produto
      * @return array
      */
-    private function extrairDados(Produto $produto)
+    private function extrairDados(Produto $produto): array
     {
         return $produto->toArray();
     }
