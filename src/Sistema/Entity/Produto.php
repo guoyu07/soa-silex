@@ -7,11 +7,6 @@ namespace Soa\Sistema\Entity;
  */
 class Produto
 {
-    /**
-     *
-     * @var string
-     */
-    private $descricao;
 
     /**
      *
@@ -27,6 +22,12 @@ class Produto
 
     /**
      *
+     * @var string
+     */
+    private $descricao;
+
+    /**
+     *
      * @var float
      */
     private $valor;
@@ -37,13 +38,18 @@ class Produto
     public function __construct(array $dados)
     {
         extract($dados);
-        if (isset($id)) {
+        if (isset($id) && $id) {
             $this->setId($id);
         }
-
-        $this->setNome($nome);
-        $this->setDescricao($descricao);
-        $this->setValor($valor);
+        if (isset($nome) && $nome) {
+            $this->setNome($nome);
+        }
+        if (isset($descricao) && $descricao) {
+            $this->setDescricao($descricao);
+        }
+        if (isset($valor) && $valor) {
+            $this->setValor($valor);
+        }
     }
 
     /**
