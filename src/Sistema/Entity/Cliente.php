@@ -35,13 +35,18 @@ class Cliente
     public function __construct(array $dados)
     {
         extract($dados);
-        if (isset($id)) {
+        if (isset($id) && $id) {
             $this->setId($id);
         }
-
-        $this->setNome($nome);
-        $this->setEmail($email);
-        $this->setDocumento($documento);
+        if (isset($nome) && $nome) {
+            $this->setNome($nome);
+        }
+        if (isset($email) && $email) {
+            $this->setEmail($email);
+        }
+        if (isset($documento) && $documento) {
+            $this->setDocumento($documento);
+        }
     }
 
     /**
