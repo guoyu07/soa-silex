@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block conteudo %}
+    <h1>Lista de produtos</h1>
+
+	<ul>
+		{% for produto in produtos %}
+		    <li><a href="{{ url("produto", {id: produto.id}) }}">{{ produto.nome }}</a> (R$ {{ produto.valor }})</li>
+		{% endfor %}
+	</ul>
+
+	<a href="{{ url("produto/new") }}">Adicionar</a>
+{% endblock %}

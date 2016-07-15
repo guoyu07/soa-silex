@@ -1,0 +1,13 @@
+{% extends 'layout.twig' %}
+
+{% block conteudo %}
+    <h1>Lista de clientes</h1>
+
+	<ul>
+		{% for cliente in clientes %}
+		    <li><a href="{{ url("cliente", {id: cliente.id}) }}">{{ cliente.nome }}</a> ({{ cliente.email }})</li>
+		{% endfor %}
+	</ul>
+
+	<a href="{{ url("cliente/new") }}">Adicionar</a>
+{% endblock %}

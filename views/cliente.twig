@@ -1,0 +1,37 @@
+{% extends 'layout.twig' %}
+
+{% block conteudo %}
+	<h1>{{ cliente.nome }}</h1>
+
+	<h2>Dados de Cadastro</h2>
+
+	{% if message is defined %}
+	<div class="alert">{{ message }}</div>
+	{% endif %}
+
+	<form method="post" action="{{ url("cliente/save") }}">
+		<table>
+			<thead>
+				<tr>
+					<th>Campo</th>
+					<th>Valor</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for campo, valor in cliente %}
+					<tr>
+						<td>{{ campo }}</td>
+						<td><input type="text" name="dados[{{ campo }}]" value="{{ valor }}" {% if campo == "id" and valor is null %}readonly{% endif %}></td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+		<button type="submit">Salvar</button>
+	</form>
+
+	{% if cliente.id is not null %}
+	<a href="{{ url("cliente/delete", {id: cliente.id}) }}">Deletar</a>
+	{% endif %}
+
+	<a href="{{ url("clientes") }}">Voltar</a>
+{% endblock %}
