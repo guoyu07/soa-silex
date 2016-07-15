@@ -14,6 +14,7 @@ $dbpath = __DIR__ . '/data/db.sqlite3';
 
 $dsn = "sqlite:{$dbpath}";
 $pdo = new Pdo($dsn);
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $app['clienteService'] = function () use ($pdo) {
     $clienteMapper = new ClienteMapper($pdo);
