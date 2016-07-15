@@ -30,4 +30,6 @@ $app->post('/produto', function (Request $request) use ($app) {
     return $app->json($produto);
 });
 
+include 'tela.php';
+
 $app->run();
