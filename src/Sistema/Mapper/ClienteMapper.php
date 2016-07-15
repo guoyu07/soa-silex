@@ -5,6 +5,9 @@ namespace Soa\Sistema\Mapper;
 use Soa\Sistema\Entity\Cliente;
 use \Pdo;
 
+/**
+ *
+ */
 class ClienteMapper
 {
 
@@ -24,6 +27,7 @@ class ClienteMapper
     }
 
     /**
+     *
      * @param  Cliente Novo cliente
      * @return Cliente Cliente com o id preenchido
      */
@@ -77,6 +81,52 @@ class ClienteMapper
         $dadosCliente = $statement->fetch(PDO::FETCH_ASSOC);
 
         return $this->buildObject($dadosCliente);
+    }
+
+    /**
+     *
+     * @param  Cliente $cliente
+     * @return Cliente
+     */
+    public function update(Cliente $cliente): Cliente
+    {
+        $params = [
+            ':nome' => $cliente->getNome(),
+            ':email' => $cliente->getEmail(),
+            ':documento' => $cliente->getDocumento(),
+        ];
+
+        $set = [];
+        foreach (array_keys($params) as $key) {
+            $keyname = substr($key, 1);
+            $set[] = "$keyname = $key";
+        }
+
+        $params[':id'] = $cliente->getId();
+
+        $sql = sprintf("UPDATE clientes SET %s WHERE id = :id", implode(', ', $set));
+        $statement = $this->connection->prepare($sql);
+        $statement->execute($params);
+
+        if (!$statement->rowCount()) {
+            throw new \Exception("Não foi possível atualizar o cliente", 1);
+        }
+
+        return $cliente;
+    }
+
+    /**
+     *
+     * @param  int    $idCliente
+     * @return int Clientes deletados
+     */
+    public function delete(int $idCliente): int
+    {
+        $sql = "DELETE FROM clientes WHERE id = :id";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([':id' => $idCliente]);
+
+        return $statement->rowCount();
     }
 
     /**
